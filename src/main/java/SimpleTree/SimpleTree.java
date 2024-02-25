@@ -2,9 +2,9 @@ import java.util.*;
 
 public class SimpleTreeNode<T>
 {
-    public T NodeValue; // значение в узле
-    public SimpleTreeNode<T> Parent; // родитель или null для корня
-    public List<SimpleTreeNode<T>> Children; // список дочерних узлов или null
+    public T NodeValue;
+    public SimpleTreeNode<T> Parent;
+    public List<SimpleTreeNode<T>> Children;
 
     public SimpleTreeNode(T val, SimpleTreeNode<T> parent)
     {
