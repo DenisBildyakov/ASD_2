@@ -121,7 +121,12 @@ class BST<T> {
             count--;
             return true;
         }
-        BSTNode<T> minChild = FinMinMax(nodeToDelete.RightChild, false);
+        BSTNode<T> minChild;
+        if (nodeToDelete.RightChild != null) {
+            minChild = FinMinMax(nodeToDelete.RightChild, false);
+        } else {
+            minChild = nodeToDelete.LeftChild;
+        }
         minChild.Parent = nodeToDelete.Parent;
         minChild.RightChild = nodeToDelete.RightChild;
         minChild.LeftChild = nodeToDelete.LeftChild;
