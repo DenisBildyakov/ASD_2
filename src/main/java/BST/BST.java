@@ -110,6 +110,11 @@ class BST<T> {
         BSTFind<T> findToDelete = FindNodeByKey(key);
         if (!findToDelete.NodeHasKey) return false;
         BSTNode<T> nodeToDelete = findToDelete.Node;
+        if (nodeToDelete.equals(this.Root)) {
+            this.Root = null;
+            count--;
+            return true;
+        }
         if (nodeToDelete.RightChild == null && nodeToDelete.LeftChild == null) {
             BSTNode<T> parent = nodeToDelete.Parent;
             if (parent.LeftChild.NodeKey == key) {
