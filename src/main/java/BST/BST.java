@@ -1,7 +1,5 @@
-package BST;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.io.*;
+import java.util.*;
 
 class BSTNode<T> {
     public int NodeKey;
@@ -188,68 +186,58 @@ class BST<T> {
 
     private ArrayList<BSTNode> inOrder() {
         if (this.Root == null) return new ArrayList<>();
-        LinkedList<BSTNode> resultList = new LinkedList<>();
+        ArrayList<BSTNode> resultList = new ArrayList<>();
         if (this.Root.LeftChild != null) {
-            rec(this.Root.LeftChild, resultList);
+            recursion_inOrder(this.Root.LeftChild, resultList);
         }
         resultList.add(this.Root);
         if (this.Root.RightChild != null) {
-            rec(this.Root.RightChild, resultList);
+            recursion_inOrder(this.Root.RightChild, resultList);
         }
-        return new ArrayList<>(resultList);
+        return resultList;
     }
 
-    private void rec(BSTNode<T> node, LinkedList<BSTNode> resultList) {
+    private void recursion_inOrder(BSTNode<T> node, ArrayList<BSTNode> resultList) {
         if (node.LeftChild != null) {
-            rec(node.LeftChild, resultList);
+            recursion_inOrder(node.LeftChild, resultList);
         }
         resultList.add(node);
         if (node.RightChild != null) {
-            rec(node.RightChild, resultList);
+            recursion_inOrder(node.RightChild, resultList);
         }
     }
 
     private ArrayList<BSTNode> postOrder() {
-        LinkedList<BSTNode> resultList = new LinkedList<>();
-        treeSwipeRecursive(getChildren(this.Root), resultList, false);
-        resultList.add(this.Root);
-        return new ArrayList<>(resultList);
+        if (this.Root == null) return new ArrayList<>();
+        ArrayList<BSTNode> resultList = new ArrayList<>();
+        recursion_postOrder(this.Root, resultList);
+        return resultList;
+    }
+
+    private void recursion_postOrder(BSTNode<T> node, ArrayList<BSTNode> resultList) {
+        if (node.LeftChild != null) {
+            recursion_postOrder(node.LeftChild, resultList);
+        }
+        if (node.RightChild != null) {
+            recursion_postOrder(node.RightChild, resultList);
+        }
+        resultList.add(node);
     }
 
     private ArrayList<BSTNode> preOrder() {
-        LinkedList<BSTNode> resultList = new LinkedList<>();
-        resultList.add(this.Root);
-        treeSwipeRecursive(getChildren(this.Root), resultList, true);
-        return new ArrayList<>(resultList);
+        if (this.Root == null) return new ArrayList<>();
+        ArrayList<BSTNode> resultList = new ArrayList<>();
+        recursion_preOrder(this.Root, resultList);
+        return resultList;
     }
 
-//    private ArrayList<BSTNode> getSubTreeList(BSTNode<T> fromNode) {
-//        LinkedList<BSTNode> resultList = new LinkedList<>();
-//        BSTNode<T> min = FinMinMax(fromNode, false);
-//        resultList.add(min);
-//        fromMinSwipe(min, resultList);
-//        return new ArrayList<>(resultList);
-//    }
-//
-//    private void fromMinSwipe(BSTNode<T> node, LinkedList<BSTNode> resultList) {
-//        if (node.Parent.equals(this.Root)) return;
-//        resultList.add(node.Parent);
-//        if (node.Parent.RightChild != null) resultList.add(node.Parent.RightChild);
-//        fromMinSwipe(node.Parent, resultList);
-//    }
-
-//    private ArrayList<BSTNode> postOrder() {
-//        LinkedList<BSTNode> resultList = new LinkedList<>();
-//        treeSwipeRecursive(getChildren(this.Root), resultList, false);
-//        resultList.add(this.Root);
-//        return new ArrayList<>(resultList);
-//    }
-//
-//    private ArrayList<BSTNode> preOrder() {
-//        LinkedList<BSTNode> resultList = new LinkedList<>();
-//        resultList.add(this.Root);
-//        treeSwipeRecursive(getChildren(this.Root), resultList, true);
-//        return new ArrayList<>(resultList);
-//    }
-
+    private void recursion_preOrder(BSTNode<T> node, ArrayList<BSTNode> resultList) {
+        resultList.add(node);
+        if (node.LeftChild != null) {
+            recursion_preOrder(node.LeftChild, resultList);
+        }
+        if (node.RightChild != null) {
+            recursion_preOrder(node.RightChild, resultList);
+        }
+    }
 }
