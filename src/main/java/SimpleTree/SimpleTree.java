@@ -1,18 +1,8 @@
-import java.util.*;
+package SimpleTree;
 
-public class SimpleTreeNode<T>
-{
-    public T NodeValue;
-    public SimpleTreeNode<T> Parent;
-    public List<SimpleTreeNode<T>> Children;
+import java.util.ArrayList;
+import java.util.List;
 
-    public SimpleTreeNode(T val, SimpleTreeNode<T> parent)
-    {
-        NodeValue = val;
-        Parent = parent;
-        Children = null;
-    }
-}
 
 public class SimpleTree<T> {
     public SimpleTreeNode<T> Root;
@@ -115,5 +105,17 @@ public class SimpleTree<T> {
     public int LeafCount() {
         long leafs = GetAllNodes().stream().filter(n -> n.Children == null || n.Children.isEmpty()).count();
         return Math.toIntExact(leafs);
+    }
+}
+
+class SimpleTreeNode<T> {
+    public T NodeValue;
+    public SimpleTreeNode<T> Parent;
+    public List<SimpleTreeNode<T>> Children;
+
+    public SimpleTreeNode(T val, SimpleTreeNode<T> parent) {
+        NodeValue = val;
+        Parent = parent;
+        Children = null;
     }
 }

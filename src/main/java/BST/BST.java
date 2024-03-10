@@ -1,5 +1,7 @@
-import java.io.*;
-import java.util.*;
+package BST;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 class BSTNode<T> {
     public int NodeKey;
@@ -143,5 +145,111 @@ class BST<T> {
     public int Count() {
         return count;
     }
+
+    public ArrayList<BSTNode> WideAllNodes() {
+        if (this.Root == null) return new ArrayList<>();
+        LinkedList<BSTNode> resultList = new LinkedList<>();
+        resultList.add(this.Root);
+
+        treeSwipeRecursive(getChildren(this.Root), resultList, true);
+        return new ArrayList<>(resultList);
+    }
+
+    private void treeSwipeRecursive(LinkedList<BSTNode> children, LinkedList<BSTNode> resultList, boolean inOrder) {
+        if (children.isEmpty()) return;
+        LinkedList<BSTNode> tmpList = new LinkedList<>();
+        for (BSTNode<T> child : children) {
+            if (inOrder) {
+                resultList.addLast(child);
+            } else {
+                resultList.addFirst(child);
+            }
+            tmpList.addAll(getChildren(child));
+        }
+        treeSwipeRecursive(tmpList, resultList, inOrder);
+    }
+
+    private LinkedList<BSTNode> getChildren(BSTNode<T> parent) {
+        if (parent.RightChild == null && parent.LeftChild == null) return new LinkedList<>();
+        LinkedList<BSTNode> list = new LinkedList<>();
+        if (parent.LeftChild != null) list.add(parent.LeftChild);
+        if (parent.RightChild != null) list.add(parent.RightChild);
+        return list;
+    }
+
+    public ArrayList<BSTNode> DeepAllNodes(int i) {
+        if (this.Root == null) return new ArrayList<>();
+        if (i == 0) return inOrder();
+        if (i == 1) return postOrder();
+        if (i == 2) return preOrder();
+
+        return new ArrayList<>();
+    }
+
+    private ArrayList<BSTNode> inOrder() {
+        if (this.Root == null) return new ArrayList<>();
+        LinkedList<BSTNode> resultList = new LinkedList<>();
+        if (this.Root.LeftChild != null) {
+            rec(this.Root.LeftChild, resultList);
+        }
+        resultList.add(this.Root);
+        if (this.Root.RightChild != null) {
+            rec(this.Root.RightChild, resultList);
+        }
+        return new ArrayList<>(resultList);
+    }
+
+    private void rec(BSTNode<T> node, LinkedList<BSTNode> resultList) {
+        if (node.LeftChild != null) {
+            rec(node.LeftChild, resultList);
+        }
+        resultList.add(node);
+        if (node.RightChild != null) {
+            rec(node.RightChild, resultList);
+        }
+    }
+
+    private ArrayList<BSTNode> postOrder() {
+        LinkedList<BSTNode> resultList = new LinkedList<>();
+        treeSwipeRecursive(getChildren(this.Root), resultList, false);
+        resultList.add(this.Root);
+        return new ArrayList<>(resultList);
+    }
+
+    private ArrayList<BSTNode> preOrder() {
+        LinkedList<BSTNode> resultList = new LinkedList<>();
+        resultList.add(this.Root);
+        treeSwipeRecursive(getChildren(this.Root), resultList, true);
+        return new ArrayList<>(resultList);
+    }
+
+//    private ArrayList<BSTNode> getSubTreeList(BSTNode<T> fromNode) {
+//        LinkedList<BSTNode> resultList = new LinkedList<>();
+//        BSTNode<T> min = FinMinMax(fromNode, false);
+//        resultList.add(min);
+//        fromMinSwipe(min, resultList);
+//        return new ArrayList<>(resultList);
+//    }
+//
+//    private void fromMinSwipe(BSTNode<T> node, LinkedList<BSTNode> resultList) {
+//        if (node.Parent.equals(this.Root)) return;
+//        resultList.add(node.Parent);
+//        if (node.Parent.RightChild != null) resultList.add(node.Parent.RightChild);
+//        fromMinSwipe(node.Parent, resultList);
+//    }
+
+//    private ArrayList<BSTNode> postOrder() {
+//        LinkedList<BSTNode> resultList = new LinkedList<>();
+//        treeSwipeRecursive(getChildren(this.Root), resultList, false);
+//        resultList.add(this.Root);
+//        return new ArrayList<>(resultList);
+//    }
+//
+//    private ArrayList<BSTNode> preOrder() {
+//        LinkedList<BSTNode> resultList = new LinkedList<>();
+//        resultList.add(this.Root);
+//        treeSwipeRecursive(getChildren(this.Root), resultList, true);
+//        return new ArrayList<>(resultList);
+//    }
 
 }
