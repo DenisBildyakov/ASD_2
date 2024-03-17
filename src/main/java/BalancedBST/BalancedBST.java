@@ -55,7 +55,7 @@ class BalancedBST {
         Integer[] rightLevel = new Integer[]{null};
         isBalanced_rec(root_node.LeftChild, leftLevel);
         isBalanced_rec(root_node.RightChild, rightLevel);
-        return Math.abs(leftLevel[0] - rightLevel[0]) < 1;
+        return Math.abs(leftLevel[0] - rightLevel[0]) <= 1;
     }
 
     private void isBalanced_rec(BSTNode node, Integer[] level) {
