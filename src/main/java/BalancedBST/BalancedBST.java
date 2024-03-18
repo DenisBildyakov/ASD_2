@@ -1,6 +1,4 @@
-package BalancedBST;
-
-import java.util.Arrays;
+import java.util.*;
 
 class BSTNode {
     public int NodeKey;
@@ -39,7 +37,7 @@ class BalancedBST {
             node = this.Root;
         } else {
             node = new BSTNode(arr[index], parent);
-            if (node.NodeKey > parent.NodeKey) {
+            if (node.NodeKey >= parent.NodeKey) {
                 parent.RightChild = node;
             } else {
                 parent.LeftChild = node;
@@ -53,6 +51,7 @@ class BalancedBST {
     }
 
     public boolean IsBalanced(BSTNode root_node) {
+        if (root_node == null || (root_node.LeftChild == null && root_node.RightChild == null)) return false;
         Integer[] leftLevel = new Integer[]{null};
         Integer[] rightLevel = new Integer[]{null};
         isBalanced_rec(root_node.LeftChild, leftLevel);
