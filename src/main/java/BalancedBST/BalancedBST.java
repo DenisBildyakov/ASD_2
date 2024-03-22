@@ -52,8 +52,8 @@ class BalancedBST {
 
     public boolean IsBalanced(BSTNode root_node) {
         if (root_node == null || (root_node.LeftChild == null && root_node.RightChild == null)) return false;
-        Integer[] leftLevel = new Integer[]{null};
-        Integer[] rightLevel = new Integer[]{null};
+        Integer[] leftLevel = new Integer[]{0};
+        Integer[] rightLevel = new Integer[]{0};
         isBalanced_rec(root_node.LeftChild, leftLevel);
         isBalanced_rec(root_node.RightChild, rightLevel);
         return Math.abs(leftLevel[0] - rightLevel[0]) <= 1;
@@ -61,7 +61,7 @@ class BalancedBST {
 
     private void isBalanced_rec(BSTNode node, Integer[] level) {
         if (node == null) return;
-        if (level[0] == null || node.Level > level[0]) level[0] = node.Level;
+        if (node.Level > level[0]) level[0] = node.Level;
         isBalanced_rec(node.LeftChild, level);
         isBalanced_rec(node.RightChild, level);
     }
