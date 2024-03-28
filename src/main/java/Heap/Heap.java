@@ -1,6 +1,4 @@
-package Heap;
-
-import java.util.Arrays;
+import java.util.*;
 
 class Heap {
     public int[] HeapArray;
