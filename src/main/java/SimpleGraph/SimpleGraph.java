@@ -33,17 +33,17 @@ class SimpleGraph {
     }
 
     public boolean IsEdge(int v1, int v2) {
-        return v1 > 0 && v1 < m_adjacency.length && v2 > 0 && v2 < m_adjacency.length && m_adjacency[v1][v2] == 1;
+        return v1 >= 0 && v1 < m_adjacency.length && v2 >= 0 && v2 < m_adjacency.length && m_adjacency[v1][v2] == 1;
     }
 
     public void AddEdge(int v1, int v2) {
-        if (v1 > 0 && v1 < m_adjacency.length && v2 > 0 && v2 < m_adjacency.length) {
+        if (v1 >= 0 && v1 < m_adjacency.length && v2 >= 0 && v2 < m_adjacency.length) {
             m_adjacency[v1][v2] = 1;
         }
     }
 
     public void RemoveEdge(int v1, int v2) {
-        if (v1 > 0 && v1 < m_adjacency.length && v2 > 0 && v2 < m_adjacency.length) {
+        if (v1 >= 0 && v1 < m_adjacency.length && v2 >= 0 && v2 < m_adjacency.length) {
             m_adjacency[v1][v2] = 0;
         }
     }
