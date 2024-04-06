@@ -1,7 +1,4 @@
-package SimpleTree;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 public class SimpleTree<T> {
@@ -70,6 +67,15 @@ public class SimpleTree<T> {
         return children;
     }
 
+    public List<SimpleTreeNode<T>> GetAllNodes(SimpleTreeNode<T> node) {
+        if (Root == null) return List.of();
+        if (Root.Children == null) return List.of(node);
+        List<SimpleTreeNode<T>> children = new ArrayList<>(node.Children);
+        children.addAll(findChildren(children));
+        children.add(node);
+        return children;
+    }
+
     private List<SimpleTreeNode<T>> findChildren(List<SimpleTreeNode<T>> children) {
         if (children == null || children.isEmpty()) return new ArrayList<>();
         List<SimpleTreeNode<T>> list = new ArrayList<>();
@@ -106,7 +112,30 @@ public class SimpleTree<T> {
         long leafs = GetAllNodes().stream().filter(n -> n.Children == null || n.Children.isEmpty()).count();
         return Math.toIntExact(leafs);
     }
+
+    public ArrayList<T> EvenTrees() {
+        ArrayList<T> resultList = new ArrayList<>();
+        SimpleTreeNode<T> node = this.Root;
+
+        List<SimpleTreeNode<T>> listTemp = new ArrayList<>();
+        listTemp.add(node);
+
+        while (!listTemp.isEmpty()) {
+            node = listTemp.remove(0);
+            SimpleTree<T> tempTree = new SimpleTree<T>(node);
+
+            if (tempTree.GetAllNodes(node).size() % 2 == 0) {
+                if (node.Parent != null) {
+                    resultList.add(node.Parent.NodeValue);
+                    resultList.add(node.NodeValue);
+                }
+                listTemp.addAll(node.Children);
+            }
+        }
+        return resultList;
+    }
 }
+
 
 class SimpleTreeNode<T> {
     public T NodeValue;
