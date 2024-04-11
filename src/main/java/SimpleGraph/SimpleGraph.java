@@ -2,9 +2,11 @@ import java.util.*;
 
 class Vertex {
     public int Value;
+    public boolean Hit;
 
     public Vertex(int val) {
         Value = val;
+        Hit = false;
     }
 }
 
@@ -57,5 +59,50 @@ class SimpleGraph {
             }
         }
         return index;
+    }
+
+    public ArrayList<Vertex> DepthFirstSearch(int VFrom, int VTo) {
+        ArrayList<Vertex> list = new ArrayList<>();
+        makeAllVertexUnhit();
+        int index = findVertex(VFrom);
+        if (index < 0 || index >= vertex.length) return list;
+        Vertex from = vertex[index];
+        from.Hit = true;
+        list.add(from);
+        depthSearch(VTo, list, index);
+        return list;
+    }
+
+    private void depthSearch(int VTo, ArrayList<Vertex> stack, int index) {
+        int[] edges = m_adjacency[index];
+        for (int i = 0; i < edges.length; i++) {
+            if (edges[i] == 1) {
+                Vertex v = vertex[i];
+                if (v.Hit) continue;
+                v.Hit = true;
+                if (v.Value == VTo) {
+                    stack.add(v);
+                    return;
+                }
+                depthSearch(VTo, stack, i);
+            }
+        }
+
+    }
+
+    private void makeAllVertexUnhit() {
+        for (int i = 0; i < vertex.length; i++) {
+            vertex[i].Hit = false;
+        }
+    }
+
+    private int findVertex(int value) {
+        int result = -1;
+        for (int i = 0; i < vertex.length; i++) {
+            if (vertex[i].Value == value) {
+                result = i;
+            }
+        }
+        return result;
     }
 }
