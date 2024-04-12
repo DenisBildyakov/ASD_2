@@ -62,32 +62,31 @@ class SimpleGraph {
     }
 
     public ArrayList<Vertex> DepthFirstSearch(int VFrom, int VTo) {
-        ArrayList<Vertex> list = new ArrayList<>();
+        LinkedList<Vertex> list = new LinkedList<>();
         makeAllVertexUnhit();
         int index = findVertex(VFrom);
-        if (index < 0 || index >= vertex.length) return list;
-        Vertex from = vertex[index];
-        from.Hit = true;
-        list.add(from);
+        if (index < 0 || index >= vertex.length) return new ArrayList<>(list);
         depthSearch(VTo, list, index);
-        return list;
+        return new ArrayList<>(list);
     }
 
-    private void depthSearch(int VTo, ArrayList<Vertex> stack, int index) {
+    private void depthSearch(int VTo, LinkedList<Vertex> stack, int index) {
+        Vertex from = vertex[index];
+        from.Hit = true;
+        stack.addLast(from);
         int[] edges = m_adjacency[index];
         for (int i = 0; i < edges.length; i++) {
             if (edges[i] == 1) {
                 Vertex v = vertex[i];
-                if (v.Hit) continue;
-                v.Hit = true;
                 if (v.Value == VTo) {
-                    stack.add(v);
+                    stack.addLast(v);
                     return;
                 }
-                depthSearch(VTo, stack, i);
+                if (!v.Hit) {
+                    depthSearch(VTo, stack, i);
+                }
             }
         }
-
     }
 
     private void makeAllVertexUnhit() {
