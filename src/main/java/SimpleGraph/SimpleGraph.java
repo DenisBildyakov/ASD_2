@@ -3,7 +3,7 @@ package SimpleGraph;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.Stack;
 
 class Vertex {
     public int Value;
@@ -71,6 +71,7 @@ class SimpleGraph {
         if (VFrom < 0 || VFrom >= vertex.length) return new ArrayList<>();
         LinkedList<Vertex> stack = new LinkedList<>();
         depthSearch(VFrom, VTo, stack);
+        if (stack.size() < 2) return new ArrayList<>();
         return new ArrayList<>(stack);
     }
 
@@ -78,17 +79,18 @@ class SimpleGraph {
         vertex[VFrom].Hit = true;
         stack.addLast(vertex[VFrom]);
         int[] adj = m_adjacency[VFrom];
-        List<Integer> adjsVertexes = new ArrayList<>();
+        Stack<Integer> adjsVertexes = new Stack<>();
         if (isAdjTarget(adj, stack, VTo, adjsVertexes)) return;
-
-        for (Integer adjV : adjsVertexes) {
-            if (!vertex[adjV].Hit) {
-                depthSearch(adjV, VTo, stack);
+        while (!adjsVertexes.isEmpty()) {
+            int newFrom = adjsVertexes.pop();
+            if (!vertex[newFrom].Hit) {
+                depthSearch(newFrom, VTo, stack);
+                if (adjsVertexes.isEmpty()) stack.removeLast();
             }
         }
     }
 
-    private boolean isAdjTarget(int[] adjs, LinkedList<Vertex> stack, int VTo, List<Integer> adjsVertexes) {
+    private boolean isAdjTarget(int[] adjs, LinkedList<Vertex> stack, int VTo, Stack<Integer> adjsVertexes) {
         boolean isFinded = false;
         for (int i = 0; i < adjs.length; i++) {
             if (adjs[i] == 1 && vertex[i].Value == vertex[VTo].Value) {
@@ -97,10 +99,20 @@ class SimpleGraph {
                 break;
             }
             if (adjs[i] == 1) {
-                adjsVertexes.add(i);
+                adjsVertexes.push(i);
             }
         }
         return isFinded;
+    }
+
+    private boolean isAllHit(int[] adjs) {
+        boolean isAllHit = false;
+        for (int i = 0; i < adjs.length; i++) {
+            if (adjs[i] == 1 && vertex[i].Hit) {
+                isAllHit = true;
+            }
+        }
+        return isAllHit;
     }
 
 
