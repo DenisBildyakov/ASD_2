@@ -65,7 +65,7 @@ class SimpleGraph {
         makeAllVertexUnhit();
         if (VFrom < 0 || VFrom >= vertex.length) return new ArrayList<>();
         LinkedList<Vertex> stack = new LinkedList<>();
-        stack.addLast(vertex[VFrom]);
+        stack.addFirst(vertex[VFrom]);
         depthSearch(VFrom, VTo, stack);
         return new ArrayList<>(stack);
     }
@@ -73,17 +73,17 @@ class SimpleGraph {
     private void depthSearch(int VFrom, int VTo, LinkedList<Vertex> stack) {
         boolean isDone = false;
         vertex[VFrom].Hit = true;
-        stack.addLast(vertex[VFrom]);
+        stack.addFirst(vertex[VFrom]);
         int[] adj = m_adjacency[VFrom];
         for (int i = 0; i < adj.length; i++) {
             if (adj[i] == 1 && vertex[i].Value == vertex[VTo].Value) {
-                stack.addLast(vertex[i]);
+                stack.addFirst(vertex[i]);
                 isDone = true;
                 break;
             }
         }
         if (isDone) return;
-        stack.removeLast();
+        stack.removeFirst();
         for (int i = 0; i < adj.length; i++) {
             if (adj[i] == 1 && !vertex[i].Hit) {
                 depthSearch(i, VTo, stack);
