@@ -1,4 +1,8 @@
-import java.util.*;
+package SimpleGraph;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 
 class Vertex {
     public int Value;
@@ -62,46 +66,39 @@ class SimpleGraph {
     }
 
     public ArrayList<Vertex> DepthFirstSearch(int VFrom, int VTo) {
-        LinkedList<Vertex> list = new LinkedList<>();
         makeAllVertexUnhit();
-        int index = findVertex(VFrom);
-        if (index < 0 || index >= vertex.length) return new ArrayList<>(list);
-        depthSearch(VTo, list, index);
-        return new ArrayList<>(list);
+        if (VFrom < 0 || VFrom >= vertex.length) return new ArrayList<>();
+        LinkedList<Vertex> stack = new LinkedList<>();
+        stack.addLast(vertex[VFrom]);
+        depthSearch(VFrom, VTo, stack);
+        return new ArrayList<>(stack);
     }
 
-    private void depthSearch(int VTo, LinkedList<Vertex> stack, int index) {
-        Vertex from = vertex[index];
-        from.Hit = true;
-        stack.addLast(from);
-        int[] edges = m_adjacency[index];
-        for (int i = 0; i < edges.length; i++) {
-            if (edges[i] == 1) {
-                Vertex v = vertex[i];
-                if (v.Value == VTo) {
-                    stack.addLast(v);
-                    return;
-                }
-                if (!v.Hit) {
-                    depthSearch(VTo, stack, i);
-                }
+    private void depthSearch(int VFrom, int VTo, LinkedList<Vertex> stack) {
+        boolean isDone = false;
+        vertex[VFrom].Hit = true;
+        stack.addLast(vertex[VFrom]);
+        int[] adj = m_adjacency[VFrom];
+        for (int i = 0; i < adj.length; i++) {
+            if (adj[i] == 1 && vertex[i].Value == vertex[VTo].Value) {
+                stack.addLast(vertex[i]);
+                isDone = true;
+                break;
+            }
+        }
+        if (isDone) return;
+        stack.removeLast();
+        for (int i = 0; i < adj.length; i++) {
+            if (adj[i] == 1 && !vertex[i].Hit) {
+                depthSearch(i, VTo, stack);
             }
         }
     }
+
 
     private void makeAllVertexUnhit() {
         for (int i = 0; i < vertex.length; i++) {
             vertex[i].Hit = false;
         }
-    }
-
-    private int findVertex(int value) {
-        int result = -1;
-        for (int i = 0; i < vertex.length; i++) {
-            if (vertex[i].Value == value) {
-                result = i;
-            }
-        }
-        return result;
     }
 }
