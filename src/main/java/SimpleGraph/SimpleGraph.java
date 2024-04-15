@@ -89,31 +89,6 @@ class SimpleGraph {
         return depthSearch(stack.pop(), VTo, stack);
     }
 
-//    private Stack<Integer> depthSearch(int VFrom, int VTo, Stack<Integer> stack) {
-//        vertex[VFrom].Hit = true;
-//        stack.push(VFrom);
-//        int[] adj = m_adjacency[VFrom];
-//        for (int i = 0; i < adj.length; i++) {
-//            if (adj[i] == 1 && vertex[i].Value == vertex[VTo].Value) {
-//                stack.push(i);
-//                return stack;
-//            }
-//        }
-//        for (int i = 0; i < adj.length; i++) {
-//            if (adj[i] == 1 && !vertex[i].Hit) {
-//                depthSearch(i, VTo, stack);
-//                break;
-//            }
-//        }
-//        if (isAllHit(adj)) {
-//            stack.pop();
-//            if (stack.isEmpty()) return stack;
-//            depthSearch(stack.peek(), VTo, stack);
-//        }
-//
-//        return stack;
-//    }
-
     private LinkedList<Integer> gatherAllAdjs(int[] adjs) {
         LinkedList<Integer> resultList = new LinkedList<>();
         for (int i = 0; i < adjs.length; i++) {
@@ -123,40 +98,6 @@ class SimpleGraph {
         }
         return resultList;
     }
-
-    private Integer getNonHit(int[] adjs) {
-        Integer result = null;
-        for (int i = 0; i < adjs.length; i++) {
-            if (adjs[i] == 1 && !vertex[i].Hit) {
-                result = i;
-                break;
-            }
-        }
-        return result;
-    }
-
-    private boolean isAdjTarget(int[] adjs, Stack<Integer> stack, int VTo) {
-        boolean isFinded = false;
-        for (int i = 0; i < adjs.length; i++) {
-            if (adjs[i] == 1 && vertex[i].Value == vertex[VTo].Value) {
-                stack.push(i);
-                isFinded = true;
-                break;
-            }
-        }
-        return isFinded;
-    }
-
-    private boolean isAllHit(int[] adjs) {
-        boolean isAllHit = true;
-        for (int i = 0; i < adjs.length; i++) {
-            if (adjs[i] == 1 && !vertex[i].Hit) {
-                isAllHit = false;
-            }
-        }
-        return isAllHit;
-    }
-
 
     private void makeAllVertexUnhit() {
         for (int i = 0; i < vertex.length; i++) {
