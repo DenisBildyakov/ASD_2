@@ -3,6 +3,7 @@ package SimpleGraph;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 class Vertex {
@@ -69,27 +70,31 @@ class SimpleGraph {
     public ArrayList<Vertex> DepthFirstSearch(int VFrom, int VTo) {
         makeAllVertexUnhit();
         if (VFrom < 0 || VFrom >= vertex.length) return new ArrayList<>();
-        LinkedList<Integer> stack = new LinkedList<>();
+        Stack<Integer> stack = new Stack<>();
         depthSearch(VFrom, VTo, stack);
         return stack.stream().map(i -> vertex[i]).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private void depthSearch(int VFrom, int VTo, LinkedList<Integer> stack) {
+    private Stack<Integer> depthSearch(int VFrom, int VTo, Stack<Integer> stack) {
         vertex[VFrom].Hit = true;
-        stack.addLast(VFrom);
+        stack.push(VFrom);
         int[] adj = m_adjacency[VFrom];
-        if (isAdjTarget(adj, stack, VTo)) return;
-
-        LinkedList<Integer> adjs = gatherAllAdjs(adj);
-        while (!adjs.isEmpty()) {
-            int newFrom = adjs.removeLast();
-            if (isAllHit(m_adjacency[VFrom])) {
-                stack.removeLast();
-            }
-            if (!vertex[newFrom].Hit) {
-                depthSearch(newFrom, VTo, stack);
+        for (int i = 0; i < adj.length; i++) {
+            if (adj[i] == 1 && vertex[i].Value == vertex[VTo].Value) {
+                stack.push(i);
+                return stack;
             }
         }
+        if (stack.isEmpty()) return stack;
+        for (int i = 0; i < adj.length; i++) {
+            if (adj[i] == 1 && !vertex[i].Hit) {
+                depthSearch(i, VTo, stack);
+                if (isAllHit(adj)) {
+                    stack.pop();
+                }
+            }
+        }
+        return stack;
     }
 
     private LinkedList<Integer> gatherAllAdjs(int[] adjs) {
@@ -102,11 +107,22 @@ class SimpleGraph {
         return resultList;
     }
 
-    private boolean isAdjTarget(int[] adjs, LinkedList<Integer> stack, int VTo) {
+    private Integer getNonHit(int[] adjs) {
+        Integer result = null;
+        for (int i = 0; i < adjs.length; i++) {
+            if (adjs[i] == 1 && !vertex[i].Hit) {
+                result = i;
+                break;
+            }
+        }
+        return result;
+    }
+
+    private boolean isAdjTarget(int[] adjs, Stack<Integer> stack, int VTo) {
         boolean isFinded = false;
         for (int i = 0; i < adjs.length; i++) {
             if (adjs[i] == 1 && vertex[i].Value == vertex[VTo].Value) {
-                stack.addLast(i);
+                stack.push(i);
                 isFinded = true;
                 break;
             }
