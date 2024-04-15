@@ -1,4 +1,10 @@
-import java.util.*;
+package SimpleGraph;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Stack;
+import java.util.stream.Collectors;
 
 class Vertex {
     public int Value;
@@ -79,17 +85,40 @@ class SimpleGraph {
                 return stack;
             }
         }
+        LinkedList<Integer> list = gatherAllAdjs(adj);
         if (stack.isEmpty()) return stack;
-        for (int i = 0; i < adj.length; i++) {
-            if (adj[i] == 1 && !vertex[i].Hit) {
-                depthSearch(i, VTo, stack);
-                if (isAllHit(adj)) {
-                    stack.pop();
-                }
-            }
+        while (!list.isEmpty()) {
+            return depthSearch(list.removeLast(), VTo, stack);
         }
-        return stack;
+        stack.pop();
+
+        return depthSearch(stack.pop(), VTo, stack);
     }
+
+//    private Stack<Integer> depthSearch(int VFrom, int VTo, Stack<Integer> stack) {
+//        vertex[VFrom].Hit = true;
+//        stack.push(VFrom);
+//        int[] adj = m_adjacency[VFrom];
+//        for (int i = 0; i < adj.length; i++) {
+//            if (adj[i] == 1 && vertex[i].Value == vertex[VTo].Value) {
+//                stack.push(i);
+//                return stack;
+//            }
+//        }
+//        for (int i = 0; i < adj.length; i++) {
+//            if (adj[i] == 1 && !vertex[i].Hit) {
+//                depthSearch(i, VTo, stack);
+//                break;
+//            }
+//        }
+//        if (isAllHit(adj)) {
+//            stack.pop();
+//            if (stack.isEmpty()) return stack;
+//            depthSearch(stack.peek(), VTo, stack);
+//        }
+//
+//        return stack;
+//    }
 
     private LinkedList<Integer> gatherAllAdjs(int[] adjs) {
         LinkedList<Integer> resultList = new LinkedList<>();
