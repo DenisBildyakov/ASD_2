@@ -1,4 +1,10 @@
-import java.util.*;
+package SimpleGraph;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Stack;
+import java.util.stream.Collectors;
 
 class Vertex {
     public int Value;
@@ -80,11 +86,11 @@ class SimpleGraph {
             }
         }
         LinkedList<Integer> list = gatherAllAdjs(adj);
-        if (stack.isEmpty()) return stack;
         while (!list.isEmpty()) {
             return depthSearch(list.removeLast(), VTo, stack);
         }
         stack.pop();
+        if (stack.isEmpty()) return stack;
 
         return depthSearch(stack.pop(), VTo, stack);
     }
