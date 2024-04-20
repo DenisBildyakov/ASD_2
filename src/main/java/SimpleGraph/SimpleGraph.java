@@ -1,4 +1,7 @@
+package SimpleGraph;
+
 import java.util.*;
+import java.util.stream.Collectors;
 
 class Vertex {
     public int Value;
@@ -103,5 +106,40 @@ class SimpleGraph {
         for (int i = 0; i < vertex.length; i++) {
             vertex[i].Hit = false;
         }
+    }
+
+    public ArrayList<Vertex> BreadthFirstSearch(int VFrom, int VTo) {
+        makeAllVertexUnhit();
+        if (VFrom < 0 || VFrom >= vertex.length) return new ArrayList<>();
+        LinkedList<Integer> queue = new LinkedList<Integer>();
+        return breadthSearch(VFrom, VTo, queue).stream().map(i -> vertex[i]).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    private LinkedList<Integer> breadthSearch(int VFrom, int VTo, LinkedList<Integer> queue) {
+        queue.addLast(VFrom);
+        vertex[VFrom].Hit = true;
+        int[] adj = m_adjacency[VFrom];
+        Integer adjUnhit = getFirstUnhit(adj);
+        if (adjUnhit != null) {
+            if (vertex[adjUnhit].Value == vertex[VTo].Value) {
+                queue.addLast(adjUnhit);
+                return queue;
+            }
+            return breadthSearch(adjUnhit, VTo, queue);
+        }
+        queue.removeFirst();
+        if (queue.isEmpty()) return queue;
+        return breadthSearch(queue.removeFirst(), VTo, queue);
+    }
+
+    private Integer getFirstUnhit(int[] adj) {
+        Integer result = null;
+        for (int i = 0; i < adj.length; i++) {
+            if (adj[i] == 1 && !vertex[i].Hit) {
+                result = i;
+                break;
+            }
+        }
+        return result;
     }
 }
