@@ -119,13 +119,13 @@ class SimpleGraph {
         if (vertex[VFrom].Value == vertex[VTo].Value) {
             return queue;
         }
-        Integer newFrom = getFirstUnhit(adj);
-        if (newFrom == null) {
-            queue.removeLast();
-            if (queue.isEmpty()) return queue;
-            return breadthSearch(queue.removeLast(), VTo, queue);
+        LinkedList<Integer> list = gatherAllAdjs(adj);
+        while (!list.isEmpty()) {
+            return breadthSearch(list.removeLast(), VTo, queue);
         }
-        return breadthSearch(newFrom, VTo, queue);
+        queue.removeLast();
+        if (queue.isEmpty()) return queue;
+        return breadthSearch(queue.removeLast(), VTo, queue);
     }
 
     private Integer getFirstUnhit(int[] adj) {
