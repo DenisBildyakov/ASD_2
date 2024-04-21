@@ -1,4 +1,10 @@
-import java.util.*;
+package SimpleGraph;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Stack;
+import java.util.stream.Collectors;
 
 class Vertex {
     public int Value;
@@ -113,20 +119,19 @@ class SimpleGraph {
     }
 
     private LinkedList<Integer> breadthSearch(int VFrom, int VTo, LinkedList<Integer> queue) {
-        queue.addLast(VFrom);
         vertex[VFrom].Hit = true;
+        queue.addLast(VFrom);
         int[] adj = m_adjacency[VFrom];
-        Integer adjUnhit = getFirstUnhit(adj);
-        if (adjUnhit != null) {
-            if (vertex[adjUnhit].Value == vertex[VTo].Value) {
-                queue.addLast(adjUnhit);
-                return queue;
-            }
-            return breadthSearch(adjUnhit, VTo, queue);
+        if (vertex[VFrom].Value == vertex[VTo].Value) {
+            return queue;
         }
-        queue.removeFirst();
-        if (queue.isEmpty()) return queue;
-        return breadthSearch(queue.removeFirst(), VTo, queue);
+        Integer newFrom = getFirstUnhit(adj);
+        if (newFrom == null) {
+            queue.removeLast();
+            if (queue.isEmpty()) return queue;
+            return breadthSearch(queue.removeLast(), VTo, queue);
+        }
+        return breadthSearch(newFrom, VTo, queue);
     }
 
     private Integer getFirstUnhit(int[] adj) {
