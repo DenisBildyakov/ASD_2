@@ -1,4 +1,10 @@
-import java.util.*;
+package SimpleGraph;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Stack;
+import java.util.stream.Collectors;
 
 class Vertex {
     public int Value;
@@ -109,23 +115,42 @@ class SimpleGraph {
         makeAllVertexUnhit();
         if (VFrom < 0 || VFrom >= vertex.length) return new ArrayList<>();
         LinkedList<Integer> queue = new LinkedList<Integer>();
-        return breadthSearch(VFrom, VTo, queue).stream().map(i -> vertex[i]).collect(Collectors.toCollection(ArrayList::new));
+        return breadthSearch(VFrom, VTo, queue);
     }
 
-    private LinkedList<Integer> breadthSearch(int VFrom, int VTo, LinkedList<Integer> queue) {
+    private ArrayList<Vertex> breadthSearch(int VFrom, int VTo, LinkedList<Integer> queue) {
+        int[] from = new int[max_vertex];
+        Arrays.fill(from, -1);
         vertex[VFrom].Hit = true;
         queue.addLast(VFrom);
-        int[] adj = m_adjacency[VFrom];
-        if (vertex[VFrom].Value == vertex[VTo].Value) {
-            return queue;
+
+        while (!queue.isEmpty()) {
+            int v = queue.removeFirst();
+            int[] adj = m_adjacency[v];
+            for (int i = 0; i < adj.length; i++) {
+                if (adj[i] == 1 && vertex[i].Value == vertex[VTo].Value) {
+                    from[i] = v;
+                    return getPath(from, VTo);
+                }
+                if (adj[i] == 1) {
+                    queue.addLast(i);
+                    from[i] = v;
+                }
+            }
         }
-        LinkedList<Integer> list = gatherAllAdjs(adj);
-        while (!list.isEmpty()) {
-            return breadthSearch(list.removeLast(), VTo, queue);
+        return new ArrayList<>();
+    }
+
+    private ArrayList<Vertex> getPath(int[] from, int VTo) {
+        LinkedList<Integer> result = new LinkedList<>();
+        int current = VTo;
+        while (current != -1) {
+            current = from[current];
+            if (current == -1) break;
+            result.addFirst(current);
         }
-        queue.removeLast();
-        if (queue.isEmpty()) return queue;
-        return breadthSearch(queue.removeLast(), VTo, queue);
+        result.addLast(VTo);
+        return result.stream().map(i -> vertex[i]).collect(Collectors.toCollection(ArrayList::new));
     }
 
     private Integer getFirstUnhit(int[] adj) {
