@@ -1,4 +1,10 @@
-import java.util.*;
+package SimpleGraph;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Stack;
+import java.util.stream.Collectors;
 
 class Vertex {
     public int Value;
@@ -126,7 +132,7 @@ class SimpleGraph {
                     from[i] = v;
                     return getPath(from, VTo);
                 }
-                if (adj[i] == 1) {
+                if (adj[i] == 1 && !vertex[i].Hit) {
                     queue.addLast(i);
                     from[i] = v;
                 }
