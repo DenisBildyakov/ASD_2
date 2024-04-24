@@ -1,4 +1,10 @@
-import java.util.*;
+package SimpleGraph;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Stack;
+import java.util.stream.Collectors;
 
 class Vertex {
     public int Value;
@@ -123,10 +129,12 @@ class SimpleGraph {
             int[] adj = m_adjacency[v];
             for (int i = 0; i < adj.length; i++) {
                 if (adj[i] == 1 && vertex[i].Value == vertex[VTo].Value) {
+                    vertex[i].Hit = true;
                     from[i] = v;
                     return getPath(from, VTo);
                 }
                 if (adj[i] == 1 && !vertex[i].Hit) {
+                    vertex[i].Hit = true;
                     queue.addLast(i);
                     from[i] = v;
                 }
