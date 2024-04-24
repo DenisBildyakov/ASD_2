@@ -1,10 +1,5 @@
-package SimpleGraph;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Stack;
-import java.util.stream.Collectors;
 
 class Vertex {
     public int Value;
