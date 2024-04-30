@@ -1,5 +1,10 @@
-import java.util.*;
+package SimpleGraph;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Stack;
+import java.util.stream.Collectors;
 
 class Vertex {
     public int Value;
@@ -156,6 +161,55 @@ class SimpleGraph {
             if (adj[i] == 1 && !vertex[i].Hit) {
                 result = i;
                 break;
+            }
+        }
+        return result;
+    }
+
+    public ArrayList<Vertex> WeakVertices() {
+        makeAllVertexUnhit();
+        int[] triangle = new int[max_vertex];
+        Arrays.fill(triangle, -1);
+
+        for (int i = 0; i < vertex.length; i++) {
+            if (vertex[i] != null && !vertex[i].Hit) {
+                ArrayList<Integer> adj = getAdjsList(m_adjacency[i]);
+                checkForTriangles(adj, triangle, i);
+            }
+        }
+        return getWeakVertices(triangle);
+    }
+
+    private ArrayList<Integer> getAdjsList(int[] adjs) {
+        ArrayList<Integer> result = new ArrayList<>();
+        for (int i = 0; i < adjs.length; i++) {
+            if (adjs[i] == 1 && !vertex[i].Hit) {
+                result.add(i);
+            }
+        }
+        return result;
+    }
+
+    private void checkForTriangles(ArrayList<Integer> adj, int[] triangle, int index) {
+        vertex[index].Hit = true;
+        for (Integer a : adj) {
+            for (Integer i : adj) {
+                if (IsEdge(a, i)) {
+                    vertex[a].Hit = true;
+                    vertex[i].Hit = true;
+                    triangle[index] = 1;
+                    triangle[a] = 1;
+                    triangle[i] = 1;
+                }
+            }
+        }
+    }
+
+    private ArrayList<Vertex> getWeakVertices(int[] triangle) {
+        ArrayList<Vertex> result = new ArrayList<>();
+        for (int i = 0; i < triangle.length; i++) {
+            if (triangle[i] == -1) {
+                result.add(vertex[i]);
             }
         }
         return result;
